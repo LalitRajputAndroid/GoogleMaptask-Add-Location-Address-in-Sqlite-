@@ -50,6 +50,7 @@ public class MapDatabase extends SQLiteOpenHelper {
 
         db.insert("Address", null, values);
     }
+
     public ArrayList<Modal> get_Address() {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -61,6 +62,7 @@ public class MapDatabase extends SQLiteOpenHelper {
 
             Modal modal = new Modal();
 
+            modal.setC_id(cursor.getInt(0));
             modal.setAreaName(cursor.getString(1));
             modal.setCity(cursor.getString(2));
             modal.setState(cursor.getString(3));
@@ -73,11 +75,10 @@ public class MapDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-    public void deletedata (int id)
-    {
+    public void deletedata(int id) {
         SQLiteDatabase database = this.getWritableDatabase();
 
-        database.delete("Address","c_id",new String[]{String.valueOf(id)});
+        database.delete("Address", "c_id=?", new String[]{String.valueOf(id)});
 
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
 
     Context context;
-    ArrayList<Modal> list ;
+    ArrayList<Modal> list;
 
     public AddressAdapter(Context context, ArrayList<Modal> list) {
         this.context = context;
@@ -32,48 +33,52 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater  = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.single_row,parent,false);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.single_row, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
 
+        final Modal modal = list.get(position);
 
-        holder.areat1.setText("AreaName ::  "+list.get(position).getAreaName());
-        holder.landmarkt2.setText("Landmark ::  "+list.get(position).getLandmark());
-        holder.cityt3.setText("City ::  "+list.get(position).getCity());
-        holder.statet4.setText("State ::  "+list.get(position).getState());
-        holder.countryt5.setText("Country ::  "+list.get(position).getCountry());
-        holder.pincodet6.setText("Pincode ::  "+list.get(position).getPincode());
+        holder.areat1.setText("AreaName ::  " + modal.getAreaName());
+        holder.landmarkt2.setText("Landmark ::  " + modal.getLandmark());
+        holder.cityt3.setText("City ::  " + modal.getCity());
+        holder.statet4.setText("State ::  " + modal.getState());
+        holder.countryt5.setText("Country ::  " + modal.getCountry());
+        holder.pincodet6.setText("Pincode ::  " + modal.getPincode());
 
         holder.deletebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setIcon(R.drawable.baseline_delete_24);
-                    builder.setTitle("Delete!");
-                    builder.setMessage("Are You Sure ?");
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setIcon(R.drawable.baseline_delete_24);
+                builder.setTitle("Delete!");
+                builder.setMessage("Are You Sure ?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                            list.remove(holder.getPosition());
+                        MapDatabase database = new MapDatabase(context);
+                        database.deletedata(modal.getC_id());
 
-                            notifyDataSetChanged();
-                        }
-                    });
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-                    builder.create();
-                    builder.show();
+                        list.remove(modal);
+                        notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                builder.create();
+                builder.show();
             }
         });
 
@@ -84,10 +89,10 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView areat1,landmarkt2,cityt3,statet4,countryt5,pincodet6;
-        Button editbtn,deletebtn;
+        TextView areat1, landmarkt2, cityt3, statet4, countryt5, pincodet6;
+        Button editbtn, deletebtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +108,5 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
         }
     }
-
 
 }
