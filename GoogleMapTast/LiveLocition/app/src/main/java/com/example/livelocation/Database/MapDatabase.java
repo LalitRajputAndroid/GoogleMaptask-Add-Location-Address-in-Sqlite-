@@ -73,4 +73,11 @@ public class MapDatabase extends SQLiteOpenHelper {
         return list;
     }
 
+    public void deletedata (int id)
+    {
+        SQLiteDatabase database = this.getWritableDatabase();
+
+        database.delete("Address","c_id",new String[]{String.valueOf(id)});
+
+    }
 }

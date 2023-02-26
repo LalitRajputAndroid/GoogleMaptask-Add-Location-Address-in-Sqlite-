@@ -1,6 +1,8 @@
 package com.example.livelocation.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +10,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.livelocation.Database.MapDatabase;
 import com.example.livelocation.Modal;
 import com.example.livelocation.R;
 
@@ -35,7 +39,9 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
+
 
         holder.areat1.setText("AreaName ::  "+list.get(position).getAreaName());
         holder.landmarkt2.setText("Landmark ::  "+list.get(position).getLandmark());
@@ -43,6 +49,33 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         holder.statet4.setText("State ::  "+list.get(position).getState());
         holder.countryt5.setText("Country ::  "+list.get(position).getCountry());
         holder.pincodet6.setText("Pincode ::  "+list.get(position).getPincode());
+
+        holder.deletebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setIcon(R.drawable.baseline_delete_24);
+                    builder.setTitle("Delete!");
+                    builder.setMessage("Are You Sure ?");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            list.remove(holder.getPosition());
+
+                            notifyDataSetChanged();
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+                    builder.create();
+                    builder.show();
+            }
+        });
 
     }
 
